@@ -19,7 +19,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
 readable-pdf:
-  source: ${READABLE_PDF_SOURCE:https://github.com/coodersio/readable-pdf-api}
+  source: ${READABLE_PDF_SOURCE:https://github.com/coodersio/readable-pdf-export-api}
   version: ${READABLE_PDF_VERSION:0.1.0}
   commit: ${READABLE_PDF_COMMIT:unknown}
   tag: ${READABLE_PDF_TAG:dev}

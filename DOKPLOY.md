@@ -5,7 +5,7 @@ This service is distributed under AGPL-3.0.
 ## Dokploy Application Settings
 
 - Source: GitHub repository
-- Repository: `coodersio/readable-pdf-api`
+- Repository: `coodersio/readable-pdf-export-api`
 - Branch: `main`
 - Build type: `Dockerfile`
 - Dockerfile path: `Dockerfile`
@@ -20,7 +20,7 @@ Dokploy supports Dockerfile applications and service-level environment variables
 ## Runtime Environment Variables
 
 ```env
-READABLE_PDF_SOURCE=https://github.com/coodersio/readable-pdf-api
+READABLE_PDF_SOURCE=https://github.com/coodersio/readable-pdf-export-api
 READABLE_PDF_VERSION=0.1.0
 READABLE_PDF_COMMIT=<git-commit-sha>
 READABLE_PDF_TAG=main
@@ -35,7 +35,7 @@ JAVA_OPTS=-XX:MaxRAMPercentage=75.0
 ## Build Args
 
 ```env
-READABLE_PDF_SOURCE=https://github.com/coodersio/readable-pdf-api
+READABLE_PDF_SOURCE=https://github.com/coodersio/readable-pdf-export-api
 READABLE_PDF_VERSION=0.1.0
 READABLE_PDF_COMMIT=<git-commit-sha>
 READABLE_PDF_TAG=main

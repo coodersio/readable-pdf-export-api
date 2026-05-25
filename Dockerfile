@@ -10,7 +10,7 @@ RUN mvn -q -DskipTests package
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-ARG READABLE_PDF_SOURCE="https://github.com/coodersio/readable-pdf-api"
+ARG READABLE_PDF_SOURCE="https://github.com/coodersio/readable-pdf-export-api"
 ARG READABLE_PDF_VERSION="0.1.0"
 ARG READABLE_PDF_COMMIT="unknown"
 ARG READABLE_PDF_TAG="docker"
