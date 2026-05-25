@@ -1,0 +1,9 @@
+.DS_Store
+target/
+*.log
+*.tmp
+.idea/
+.vscode/
+/.env
+/.env.*
+!/README.md

@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: readable-pdf-api
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 100MB
+
+logging:
+  level:
+    io.cooders.readablepdf: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+readable-pdf:
+  source: ${READABLE_PDF_SOURCE:https://github.com/coodersio/readable-pdf-api}
+  version: ${READABLE_PDF_VERSION:0.1.0}
+  commit: ${READABLE_PDF_COMMIT:unknown}
+  tag: ${READABLE_PDF_TAG:dev}
+  image-digest: ${READABLE_PDF_IMAGE_DIGEST:unknown}
+  license: ${READABLE_PDF_LICENSE:AGPL-3.0}
+  max-pages: ${READABLE_PDF_MAX_PAGES:50}
+
