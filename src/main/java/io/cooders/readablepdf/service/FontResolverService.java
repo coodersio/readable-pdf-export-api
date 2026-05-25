@@ -85,8 +85,6 @@ public class FontResolverService {
                     return font;
                 }
             } catch (IOException | RuntimeException ignored) {
-                // Try the next registered name. Figma exposes family/style names,
-                // while OS font registries vary by platform and installed fonts.
             }
         }
 
@@ -114,8 +112,6 @@ public class FontResolverService {
                 unicodeFontCache.put(pdfDocument, font);
                 return font;
             } catch (IOException | RuntimeException ignored) {
-                // Try the next known fallback path. Font availability differs across local,
-                // container, and production environments.
             }
         }
 
@@ -316,7 +312,6 @@ public class FontResolverService {
         try {
             PdfFontFactory.registerSystemDirectories();
         } catch (RuntimeException ignored) {
-            // Font registration is a best-effort style fidelity upgrade.
         }
         systemFontsRegistered = true;
     }

@@ -1,6 +1,6 @@
 # Dokploy Deployment
 
-This API is intended to be deployed as a public AGPL-3.0 source repository because it uses iText 8 under AGPL.
+This service is distributed under AGPL-3.0.
 
 ## Dokploy Application Settings
 
@@ -15,7 +15,7 @@ This API is intended to be deployed as a public AGPL-3.0 source repository becau
 
 The Dockerfile also defines a container healthcheck for `http://localhost:8080/api/pdf/health`. Dokploy can use the same path for its service health check.
 
-Dokploy supports Dockerfile applications and service-level environment variables. Use service variables for runtime config and build args for source disclosure metadata.
+Dokploy supports Dockerfile applications and service-level environment variables.
 
 ## Runtime Environment Variables
 
@@ -27,6 +27,8 @@ READABLE_PDF_TAG=main
 READABLE_PDF_IMAGE_DIGEST=<image-digest-or-unknown>
 READABLE_PDF_LICENSE=AGPL-3.0
 READABLE_PDF_MAX_PAGES=50
+READABLE_PDF_CORS_ALLOWED_ORIGINS=null
+READABLE_PDF_CORS_ALLOWED_ORIGIN_PATTERNS=<allowed-origin-patterns>
 JAVA_OPTS=-XX:MaxRAMPercentage=75.0
 ```
 
@@ -45,17 +47,7 @@ READABLE_PDF_IMAGE_DIGEST=<image-digest-or-unknown>
 After deployment, verify:
 
 ```bash
-curl https://api.readablepdfexport.com/api/pdf/health
-curl https://api.readablepdfexport.com/api/pdf/source
-curl https://api.readablepdfexport.com/api/pdf/version
+curl https://<api-host>/api/pdf/health
+curl https://<api-host>/api/pdf/source
+curl https://<api-host>/api/pdf/version
 ```
-
-The Figma plugin production build should use:
-
-```env
-VITE_API_BASE_URL=https://api.readablepdfexport.com/api
-```
-
-## Data Handling Requirement
-
-This service receives uploaded page PDFs plus Figma text metadata for PDF processing. Do not add billing, user accounts, private analytics, or persistent document storage to this open-source engine. Keep business logic in a separate closed service if needed.

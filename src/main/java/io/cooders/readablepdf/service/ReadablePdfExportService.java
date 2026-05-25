@@ -61,8 +61,8 @@ public class ReadablePdfExportService {
             }
 
             target.getDocumentInfo()
-                    .setTitle(defaultString(request.title(), "Readable PDF Export"))
-                    .setCreator("Readable PDF Export")
+                    .setTitle(defaultString(request.title(), "PDF Document"))
+                    .setCreator("PDF API")
                     .setProducer("readable-pdf-api");
         }
 
@@ -102,13 +102,13 @@ public class ReadablePdfExportService {
     }
 
     private String buildFileName(String title) {
-        String baseName = defaultString(title, "readable-pdf-export")
+        String baseName = defaultString(title, "document")
                 .toLowerCase()
                 .replaceAll("[^a-z0-9._-]+", "-")
                 .replaceAll("(^-+|-+$)", "");
 
         if (baseName.isBlank()) {
-            baseName = "readable-pdf-export";
+            baseName = "document";
         }
 
         return baseName + ".pdf";

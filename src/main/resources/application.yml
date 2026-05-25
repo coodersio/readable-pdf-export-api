@@ -26,4 +26,6 @@ readable-pdf:
   image-digest: ${READABLE_PDF_IMAGE_DIGEST:unknown}
   license: ${READABLE_PDF_LICENSE:AGPL-3.0}
   max-pages: ${READABLE_PDF_MAX_PAGES:50}
-
+  cors:
+    allowed-origins: ${READABLE_PDF_CORS_ALLOWED_ORIGINS:null}
+    allowed-origin-patterns: ${READABLE_PDF_CORS_ALLOWED_ORIGIN_PATTERNS:http://localhost:*}

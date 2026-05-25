@@ -10,8 +10,8 @@
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>Readable PDF API</name>
-    <description>Open-source PDF engine for Readable PDF Export</description>
+    <name>PDF API</name>
+    <description>Open-source PDF processing service</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -74,4 +74,3 @@
         </plugins>
     </build>
 </project>
-
