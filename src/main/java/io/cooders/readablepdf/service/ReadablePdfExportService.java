@@ -22,15 +22,18 @@ public class ReadablePdfExportService {
 
     private final int maxPages;
     private final PreflightService preflightService;
+    private final PdfTextScrubberService pdfTextScrubberService;
     private final TextLayerService textLayerService;
 
     public ReadablePdfExportService(
             @Value("${readable-pdf.max-pages}") int maxPages,
             PreflightService preflightService,
+            PdfTextScrubberService pdfTextScrubberService,
             TextLayerService textLayerService
     ) {
         this.maxPages = maxPages;
         this.preflightService = preflightService;
+        this.pdfTextScrubberService = pdfTextScrubberService;
         this.textLayerService = textLayerService;
     }
 
@@ -52,6 +55,7 @@ public class ReadablePdfExportService {
                 for (int copiedPageNumber = targetPageCountBeforeCopy + 1;
                      copiedPageNumber <= target.getNumberOfPages();
                      copiedPageNumber += 1) {
+                    pdfTextScrubberService.removeTextObjects(target.getPage(copiedPageNumber));
                     textLayerService.addReadableTextLayer(target, target.getPage(copiedPageNumber), pageMetadata);
                 }
 

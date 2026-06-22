@@ -2,9 +2,15 @@ package io.cooders.readablepdf.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import io.cooders.readablepdf.dto.ExportOptions;
 import io.cooders.readablepdf.dto.ExportResult;
 import io.cooders.readablepdf.dto.PdfRect;
@@ -25,6 +31,7 @@ class ReadablePdfExportServiceTest {
         ReadablePdfExportService exportService = new ReadablePdfExportService(
                 10,
                 new PreflightService(),
+                new PdfTextScrubberService(),
                 new TextLayerService(new SvgTextLayerParser(), new FontResolverService(""))
         );
         byte[] backgroundPdf = blankPdf();
@@ -72,10 +79,74 @@ class ReadablePdfExportServiceTest {
         }
     }
 
+    @Test
+    void removesSourcePdfTextBeforeAddingReadableLayer() throws Exception {
+        ReadablePdfExportService exportService = new ReadablePdfExportService(
+                10,
+                new PreflightService(),
+                new PdfTextScrubberService(),
+                new TextLayerService(new SvgTextLayerParser(), new FontResolverService(""))
+        );
+        byte[] backgroundPdf = textPdf("Source Ghost");
+        String svg = """
+                <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+                  <text x="20" y="30" font-size="12" fill="#111111">Clean Text</text>
+                </svg>
+                """;
+        ReadableTextNode textNode = new ReadableTextNode(
+                "1:2",
+                "Title",
+                "Clean Text",
+                true,
+                null,
+                new PdfRect(20, 20, 80, 14),
+                List.of(List.of(1d, 0d, 20d), List.of(0d, 1d, 20d)),
+                "Inter Regular",
+                "Inter",
+                "Regular",
+                12,
+                "AUTO",
+                "0",
+                new RgbaColor(0, 0, 0, 1),
+                1d
+        );
+        ReadablePdfRequest request = new ReadablePdfRequest(
+                "Fixture",
+                "REAL_TEXT_BASIC",
+                new ExportOptions(false, true),
+                List.of(new ReadablePdfPage("1:1", "Page 1", 200, 100, new PdfRect(0, 0, 200, 100), svg, List.of(textNode)))
+        );
+
+        ExportResult result = exportService.export(
+                request,
+                List.of(new MockMultipartFile("pagePdfs", "page_1.pdf", "application/pdf", backgroundPdf))
+        );
+
+        try (PdfDocument output = new PdfDocument(new PdfReader(new ByteArrayInputStream(result.pdfBytes())))) {
+            String extractedText = PdfTextExtractor.getTextFromPage(output.getPage(1));
+            assertThat(extractedText).contains("Clean Text");
+            assertThat(extractedText).doesNotContain("Source Ghost");
+        }
+    }
+
     private byte[] blankPdf() throws Exception {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (PdfDocument document = new PdfDocument(new PdfWriter(output))) {
             document.addNewPage();
+        }
+        return output.toByteArray();
+    }
+
+    private byte[] textPdf(String text) throws Exception {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (PdfDocument document = new PdfDocument(new PdfWriter(output))) {
+            PdfCanvas canvas = new PdfCanvas(document.addNewPage(new PageSize(200, 100)));
+            PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+            canvas.beginText();
+            canvas.setFontAndSize(font, 12);
+            canvas.moveText(20, 70);
+            canvas.showText(text);
+            canvas.endText();
         }
         return output.toByteArray();
     }
