@@ -25,7 +25,7 @@ ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0" \
     READABLE_PDF_LICENSE="AGPL-3.0"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl ca-certificates \
+    && apt-get install -y --no-install-recommends curl ca-certificates fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system app && useradd --system --gid app app
