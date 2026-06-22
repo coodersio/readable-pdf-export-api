@@ -1,12 +1,16 @@
 package io.cooders.readablepdf.service;
 
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.pdf.PdfDictionary;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvasConstants;
 import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfName;
 import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfString;
 import io.cooders.readablepdf.dto.PdfRect;
 import io.cooders.readablepdf.dto.ReadableTextNode;
 import io.cooders.readablepdf.dto.ReadablePdfPage;
@@ -224,6 +228,7 @@ public class TextLayerService {
                 canvas.setExtGState(new PdfExtGState().setFillOpacity((float) Math.max(0, Math.min(1, opacity))));
             }
         }
+        canvas.beginMarkedContent(PdfName.Span, actualText(text));
         canvas.beginText();
         canvas.setFontAndSize(font, pdfFontSize);
         canvas.setCharacterSpacing(text.length() > 1 ? characterSpacing : 0);
@@ -241,7 +246,14 @@ public class TextLayerService {
         );
         canvas.showText(text);
         canvas.endText();
+        canvas.endMarkedContent();
         canvas.restoreState();
+    }
+
+    private PdfDictionary actualText(String text) {
+        PdfDictionary properties = new PdfDictionary();
+        properties.put(PdfName.ActualText, new PdfString(text, PdfEncodings.UNICODE_BIG));
+        return properties;
     }
 
     private boolean shouldSkip(ReadableTextNode textNode) {
