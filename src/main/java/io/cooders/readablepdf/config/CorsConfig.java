@@ -16,7 +16,7 @@ public class CorsConfig {
     private final List<String> allowedOriginPatterns;
 
     public CorsConfig(
-            @Value("${readable-pdf.cors.allowed-origins:null}") String allowedOrigins,
+            @Value("${readable-pdf.cors.allowed-origins:null,https://www.figma.com,https://figma.com}") String allowedOrigins,
             @Value("${readable-pdf.cors.allowed-origin-patterns:http://localhost:*}") String allowedOriginPatterns
     ) {
         this.allowedOrigins = splitValues(allowedOrigins);
